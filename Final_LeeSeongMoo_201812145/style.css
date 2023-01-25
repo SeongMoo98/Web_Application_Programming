@@ -1,0 +1,7 @@
+#outputDiv{
+    border: 1px solid black;
+}
+#text_div{
+    display: inline-block;
+    vertical-align: top;
+}

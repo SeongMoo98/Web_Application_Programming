@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<!-- Fig. 9.9: scoping.html -->
+<!-- Scoping example. -->
+<html>
+   <head>
+      <meta charset = "utf-8">
+      <title>Scoping Example</title>
+      <style type="text/css">
+        p       { margin: 0px; }
+        p.space { margin-top: 10px;}
+    </style>
+
+    <script>
+        
+        var output;
+        //global variable
+        var x = 1;
+
+        function start(){
+            var x = 5;
+
+            output = "<p> local x in start is " + x + "</p>"
+
+            functionA();
+            functionB();
+            functionA();
+            functionB();
+
+            output += "<p class ='space'> local x in start in is " + x + "</p>";
+
+            document.getElementById("results").innerHTML = output;
+        }
+
+        function functionA(){
+            var x = 25;
+            output += "<p class='space'>local x in functionA is " + x + " after entering functionA</p>";
+            x++;
+            output += "<p>local x in functionA is " + x + " before exiting functionA</p>";
+        }
+
+        function functionB(){
+            output += "<p class = 'space'>global variable x is " + x + " on entering functionB</p>";
+            x *= 10;
+            output += "<p>global variable x is " + x + " on exiting functionB</p>";
+        }
+
+        window.addEventListener("load", start, false);
+    </script>
+</head>
+<body onload="start()">
+    <div id = "results"></div>
+    
+    
+</body>
+</html>

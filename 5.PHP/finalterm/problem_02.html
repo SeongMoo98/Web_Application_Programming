@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>LinkDB</title>
+    <style type="text/css">
+        img {
+            max-width: 120px;
+            max-height: 100px;
+        }
+        h3, h4 {
+            font-weight: bolder;
+        }
+        a   { 
+            text-decoration: none;
+        }
+        table {
+            border: 2px solid;
+            border-collapse: collapse;
+            text-align: center;
+            width: 650px;
+            word-break: break-all;
+            height: auto;
+        }
+        th, td{
+            border: 1px solid;
+        }
+    </style>
+    
+    <script type="text/javascript">
+        var sort_base = 'classify';
+        var sort_type = 'asc';
+
+        function addLink(){
+            var eform = document.forms[0];
+            if(eform.title.value == "" || eform.link.value == "" ||
+            eform.icon.value == ""|| eform.classify.value == ""){
+                window.alert("비어있는 값을 모두 입력해주세요.");
+                return;
+            }            
+            var data = {
+                'mode': 'insert',
+                'classify': eform.classify.value,
+                'title': eform.title.value,
+                'link': eform.link.value,
+                'icon': eform.icon.value
+            };
+            update(data);
+            document.forms[0].reset();
+        }
+
+        function update(data){
+            fetch('./problem_02.php', {
+                method: "POST",
+                headers: {
+                    "Accept" : 'application/json',
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then(res => res.json())
+                .then(json => {
+                    if (json.error == "yes"){
+                        window.alert("이미 있는 즐겨찾기 제목입니다. 다른 제목을 사용해주세요.");
+                    }
+                    else {
+                        //window.alert("추가 완료");
+                        showLinks();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        
+        function showLinks(){
+            document.getElementById("sorts").innerHTML = "<label>정렬 기준: " + sort_base + " & " + sort_type + "</label><br>";
+            var list = document.getElementById("list");
+            list.innerHTML = "";
+
+            fetch('./problem_02.php', {
+                method: "POST",
+                headers: {
+                    "Accept" : 'application/json',
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    'mode': 'show',
+                    'sort_base': sort_base,
+                    'sort_type': sort_type
+                })
+            })
+                .then(res => res.json())
+                .then(json => {
+                    if(json.length){
+                        if (json[0].error == "no"){
+                            for(var idx = 0; idx < json.length; idx++){
+                                var link = makeLink(json[idx].classify, json[idx].title, json[idx].link,
+                                json[idx].icon, json[idx].count);
+                                list.innerHTML += link;
+                            }               
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        function makeLink(classify, title, link, icon, count){
+            return make_td1(icon) + make_td0(classify) + make_td2(title, link)
+                + make_td0(link) + make_td0(count) + editDelete(title);
+        }
+        function make_td0(a){
+            return "<td>" + a + "</td>";
+        }
+        function make_td1(a){
+            return "<td><img src='" + a + "'></img></td>";
+        }
+        function make_td2(a, b){
+            return "<td><a href='" + b + "'>" + a + "</td>"; //"' onclick='cntchk('" + a + "')" + a + "</td>";
+        }
+        function cntchk(title){
+            fetch('./problem_02.php', {
+                method: "POST",
+                headers: {
+                    "Accept" : 'application/json',
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    'mode': 'search',
+                    'title': title
+                })
+            })
+                .then(res => res.json())
+                .then(json => {
+                    if(json.length){
+                        if (json[0].error == "no"){
+                            showLinks();
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        
+        function editDelete(b){
+            return "<td>수정</td>" + "<td>삭제</td>";
+        }
+
+        function deleteLink(){
+            if (document.forms[0].title.value == ""){
+                window.alert("제거할 즐겨찾기의 제목을 입력해주세요.");
+                return;
+            }
+            fetch('/problem_02.php', {
+                method: "POST",
+                headers: {
+                    "Accept" : 'application/json',
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    'mode': 'delete',
+                    'title': document.forms[0].title.value
+                })
+            })
+                .then(res => res.json())
+                .then(json => {
+                    if (json.error == "yes"){
+                        window.alert("일치하는 제목을 가진 즐겨찾기가 없습니다.");
+                    }
+                    else{
+                        makePages();
+                        showLinks();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function changeSort(){
+            if(sort_type == 'asc') sort_type = 'desc';
+            else if(sort_type == 'desc') sort_type = 'asc';
+            showLinks();
+        }
+        function sort_classify(){
+            sort_base = 'classify';
+            showLinks();
+        }
+        function sort_title(){
+            sort_base = 'title';
+            showLinks();
+        }
+        function sort_count(){
+            sort_base = 'count';
+            showLinks();
+        }
+        function start(){
+            fetch('./problem_02.php', {
+                method: "POST",
+                headers: {
+                    "Accept" : 'application/json',
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    'mode': 'start',
+                })
+            })
+                .then(res => res.json())
+                .then(json => {
+                    if(json.total){
+                        showLinks();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+    </head>
+<body onload="start()">
+    <div class="maindiv">
+        <form name="form1" method="POST" action="/problem_02.php">
+            <label>1. 정렬기준에 현재 정렬기준 및 순서(오름,내림) 나타남</label><br>
+            <label>2. 분류, 이름, 방문 횟수(파란색) 및 정렬 변경 버튼 누르면 그에 맞게 정렬됨</label><br>
+            <label>3. showlink 실행할 때마다 표가 비워져서 새로고침하는 것처럼 보이지만 새로고침 없이 작동됨</label><br><br>
+            <label>분류: <input type="text" name="classify" id="classify"></label><br>
+            <label>이름: <input type="text" name="title" id="title"></label><br>
+            <label>링크: <input type="text" name="link" id="link"></label><br>
+            <label>아이콘(링크): <input type="text" name="icon" id="icon"></label><br>
+
+            <input type="button" name="addBtn" id="addBtn" value="추가" onclick="addLink()">
+            <input type="button" name="delBtn" id="delBtn" value="삭제" onclick="deleteLink()">
+        </form>
+        <br>
+        <div id="container">
+            <label id="sorts">정렬 기준 : </label>
+            <input type="button" name="changeSort" id="changeSort" value="정렬 변경(오<=>내)" onclick="changeSort()">
+            <table>
+                <caption>즐겨찾기 목록</caption>
+                <thead>
+                    <tr>
+                        <th class="sorting">로고</th>
+                        <th class="sorting"><a href="javascript:sort_classify();">분류</a></th>
+                        <th class="sorting"><a href="javascript:sort_title();">이름</a></th>
+                        <th class="sorting">링크</th>
+                        <th class="sorting"><a href="javascript:sort_count();">방문 횟수</a></th>
+                        <th class="sorting">수정</th>
+                        <th class="sorting">삭제</th>
+                    </tr>
+                </thead>
+                <tbody id="list"></tbody>
+            </table>
+        </div>
+        <div id="output"></div>
+    </div>
+</body>
+</html>

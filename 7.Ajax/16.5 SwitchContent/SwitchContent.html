@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<!-- Fig. 16.5: SwitchContent.html -->
+<!-- Asynchronously display content without reloading the page. -->
+<html>
+<head>
+   <meta charset = "utf-8">
+   <style type = "text/css">
+      .box { border: 1px solid black; padding: 10px }
+   </style>
+   <title>Switch Content Asynchronously</title>
+   <script>
+      var asyncRequest; // variable to hold XMLHttpRequest object
+
+      // set up event handlers
+      function registerListeners()
+      {
+         var img;
+         //각 Img에 mouseover, mouseout Event를 등록
+         img = document.getElementById( "cpphtp" );
+         img.addEventListener( "mouseover", function() { getContent( "cpphtp.html" ); }, false ); 
+         img.addEventListener( "mouseout", clearContent, false ); 
+         
+         img = document.getElementById( "iw3htp" );
+         img.addEventListener( "mouseover", function() { getContent( "iw3htp.html" ); }, false ); 
+         img.addEventListener( "mouseout", clearContent, false ); 
+         
+         img = document.getElementById( "jhtp" );
+         img.addEventListener( "mouseover", function() { getContent( "jhtp.html" ); }, false );
+         img.addEventListener( "mouseout", clearContent, false ); 
+         
+         img = document.getElementById( "vbhtp" );
+         img.addEventListener( "mouseover", function() { getContent( "vbhtp.html" ); }, false ); 
+         img.addEventListener( "mouseout", clearContent, false ); 
+         
+         img = document.getElementById( "vcshtp" );
+         img.addEventListener( "mouseover", function() { getContent( "vcshtp.html" ); }, false );
+         img.addEventListener( "mouseout", clearContent, false ); 
+         
+         img = document.getElementById( "javafp" );
+         img.addEventListener( "mouseover", function() { getContent( "javafp.html" ); }, false ); 
+         img.addEventListener( "mouseout", clearContent, false ); 
+      }
+
+
+      // Set up and send the asynchronous request
+      function getContent( url ){
+         // Attempt to create XMLHttpRequest object and make the request
+         try{
+            asyncRequest = new XMLHttpRequest();
+            
+            // CallBack Function은 
+            // XMLHttpRequest Object의 "readystatechange" Event에 대한 Event Handler로 등록된다
+            //    Request가 될 때마다 XMLHttpRequest는 "readystatechange" Event Handler를 호출
+            //    진행상태는 0-4인 readyState Attribute로 모니터링된다
+            asyncRequest.addEventListener("readystatechange", stateChange, false);
+            // 동기, 비동기 선택
+            asyncRequest.open("GET", url, true); // 3번째 Parameter : boolean async
+            asyncRequest.send();
+         }
+         catch( exception ){
+            alert("Request failed.");
+         }
+      }
+
+      // Display the response data on the page
+      function stateChange(){
+         if(asyncRequest.readyState == 4 &&
+            asyncRequest.status == 200)
+         {
+            document.getElementById("contentArea").innerHTML = asyncRequest.responseText;
+         }
+      }
+      function clearContent(){
+         document.getElementById("contentArea").innerHTML = "";
+      }
+      window.addEventListener( "load", registerListeners, false );
+   </script>
+</head>
+<body>
+   <h1>Mouse over a book for more information.</h1>
+   <img id = "cpphtp" alt = "C++ How to Program book cover" src = "../thumbs/cpphtp8.jpg">
+   <img id = "iw3htp" alt = "Internet & WWW How to Program book cover" src = "../thumbs/iw3htp5.jpg">
+   <img id = "jhtp" alt = "Java How to Program book cover" src = "../thumbs/jhtp9.jpg">
+   <img id = "vbhtp" alt = "Visual Basic 2010 How to Program book cover" src = "../thumbs/vb2010htp.jpg">
+   <img id = "vcshtp" alt = "Visual C# 2010 How to Program book cover"  src = "../thumbs/vcsharp2010htp.jpg">
+   <img id = "javafp" alt = "Java for Programmers book cover" src = "../thumbs/javafp.jpg">
+   
+   <div class = "box" id = "contentArea"></div>
+</body>
+</html>
+
+
+<!--
+**************************************************************************
+* (C) Copyright 1992-2012 by Deitel & Associates, Inc. and               *
+* Pearson Education, Inc. All Rights Reserved.                           *
+*                                                                        *
+* DISCLAIMER: The authors and publisher of this book have used their     *
+* best efforts in preparing the book. These efforts include the          *
+* development, research, and testing of the theories and programs        *
+* to determine their effectiveness. The authors and publisher make       *
+* no warranty of any kind, expressed or implied, with regard to these    *
+* programs or to the documentation contained in these books. The authors *
+* and publisher shall not be liable in any event for incidental or       *
+* consequential damages in connection with, or arising out of, the       *
+* furnishing, performance, or use of these programs.                     *
+**************************************************************************
+-->

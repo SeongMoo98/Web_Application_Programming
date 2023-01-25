@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>LinkDB</title>
+    <style type="text/css">
+        img {
+            max-width: 120px;
+            max-height: 100px;
+        }
+        h3, h4 {
+            font-weight: bolder;
+        }
+        a   { 
+            text-decoration: none;
+        }
+        table {
+            border: 2px solid;
+            border-collapse: collapse;
+            text-align: center;
+            width: 650px;
+            word-break: break-all;
+            height: auto;
+        }
+        th, td{
+            border: 1px solid;
+        }
+    </style>
+    
+    <script type="text/javascript">
+        var sorta = 'classify';
+        var sortb = 'asc';
+        function addLink(){
+            var eform = document.forms[0];
+            if(eform.title.value == "" || eform.link.value == "" ||
+            eform.icon.value == ""|| eform.classify.value == ""){
+                window.alert("비어있는 값을 모두 입력해주세요.");
+                return;
+            }            
+            var data = {
+                'mode': 'insert',
+                'classify': eform.classify.value,
+                'title': eform.title.value,
+                'link': eform.link.value,
+                'icon': eform.icon.value
+            };
+            update(data);
+            document.forms[0].reset();
+        }
+        function update(data){
+            fetch('./linksv.php', {
+                method: "POST",
+                headers: {
+                    "Accept" : 'application/json',
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then(res => res.json())
+                .then(json => {
+                    if (json.error == "yes"){
+                        window.alert("이미 있는 즐겨찾기 제목입니다. 다른 제목을 사용해주세요.");
+                    }
+                    else {
+                        //window.alert("추가 완료");
+                        showLinks();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        function showLinks(){
+            document.getElementById("sorts").innerHTML = "<label>정렬 기준: " + sorta + " & " + sortb + "</label><br>";
+            var list = document.getElementById("list");
+            list.innerHTML = "";
+
+            fetch('./linksv.php', {
+                method: "POST",
+                headers: {
+                    "Accept" : 'application/json',
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    'mode': 'show',
+                    'sorta': sorta,
+                    'sortb': sortb
+                })
+            })
+                .then(res => res.json())
+                .then(json => {
+                    if(json.length){
+                        if (json[0].error == "no"){
+                            for(var idx = 0; idx < json.length; idx++){
+                                var link = makeLink(json[idx].classify, json[idx].title, json[idx].link,
+                                json[idx].icon, json[idx].count);
+                                list.innerHTML += link;
+                            }               
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        function makeLink(classify, title, link, icon, count){
+            return maketd1(icon) + maketd0(classify) + maketd2(title, link)
+                + maketd0(link) + maketd0(count) + editdelete(title);
+        }
+        function maketd0(a){
+            return "<td>" + a + "</td>";
+        }
+        function maketd1(a){
+            return "<td><img src='" + a + "'></img></td>";
+        }
+        function maketd2(a, b){
+            return "<td><a href='" + b + "'>" + a + "</td>"; //"' onclick='cntchk('" + a + "')" + a + "</td>";
+        }
+        function cntchk(title){
+            fetch('./linksv.php', {
+                method: "POST",
+                headers: {
+                    "Accept" : 'application/json',
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    'mode': 'search',
+                    'title': title
+                })
+            })
+                .then(res => res.json())
+                .then(json => {
+                    if(json.length){
+                        if (json[0].error == "no"){
+                            showLinks();
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        function editdelete(b){
+            return "<td>수정</td>" + "<td>삭제</td>";
+        }
+        function deleteLink(){
+            if (document.forms[0].linkTitle.value == ""){
+                window.alert("제거할 즐겨찾기의 제목을 입력해주세요.");
+                return;
+            }
+            fetch('/server.php', {
+                method: "POST",
+                headers: {
+                    "Accept" : 'application/json',
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    'mode': 'delete',
+                    'title': document.forms[0].linkTitle.value,
+                })
+            })
+                .then(res => res.json())
+                .then(json => {
+                    if (json.error == "yes"){
+                        window.alert("일치하는 제목을 가진 즐겨찾기가 없습니다.");
+                    }
+                    else{
+                        makePages();
+                        showLinks();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        // function trclick(title){
+        //     var out = document.getElementById("output");
+        //     out.innerHTML = "";
+        //     fetch('./linksv.php', {
+        //         method: "POST",
+        //         headers: {
+        //             "Accept" : 'application/json',
+        //             "Content-Type": "application/json",
+        //         },
+        //         body: JSON.stringify({
+        //             'mode': 'search',
+        //             'title': title
+        //         })
+        //     })
+        //         .then(res => res.json())
+        //         .then(json => {
+        //             if(json.length){
+        //                 if (json[0].error == "no"){
+        //                     for(var idx = 0; idx < json.length; idx++){
+        //                         var link = makeLink(json[idx].classify, json[idx].title, json[idx].author,
+        //                         json[idx].price);
+        //                         out.innerHTML += "<h3>[" + json[idx].classify + "] " + json[idx].title + "</h3>"
+        //                         + "<p>" + json[idx].author + " 지음</p>"
+        //                         + "<p>" + json[idx].translator + " 옮김</p>"
+        //                         + "<p>" + json[idx].publisher + " 펴냄</p>"
+        //                         + "<p>" + json[idx].year + "년 " + json[idx].month + "월 출간</p>"
+        //                         + "<p>총 " + json[idx].page + "p</p>"
+        //                         + "<h4>정가: " + priceToString(json[idx].price) + " 원</h4>";
+        //                     }               
+        //                 }
+        //             }
+        //         })
+        //         .catch(error => console.error('Error:', error));
+        // }
+        function changeSort(){
+            if(sortb == 'asc') sortb = 'desc';
+            else if(sortb == 'desc') sortb = 'asc';
+            showLinks();
+        }
+        function sort1(){
+            sorta = 'classify';
+            showLinks();
+        }
+        function sort2(){
+            sorta = 'title';
+            showLinks();
+        }
+        function sort3(){
+            sorta = 'count';
+            showLinks();
+        }
+        function start(){
+            fetch('./linksv.php', {
+                method: "POST",
+                headers: {
+                    "Accept" : 'application/json',
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    'mode': 'start',
+                })
+            })
+                .then(res => res.json())
+                .then(json => {
+                    if(json.total){
+                        showLinks();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+    </head>
+<body onload="start()">
+    <div class="maindiv">
+        <form name="form1" method="POST" action="/linksv.php">
+            <label>1. 정렬기준에 현재 정렬기준 및 순서(오름,내림) 나타남</label><br>
+            <label>2. 분류, 이름, 방문 횟수(파란색) 및 정렬 변경 버튼 누르면 그에 맞게 정렬됨</label><br>
+            <label>3. showlink 실행할 때마다 표가 비워져서 새로고침하는 것처럼 보이지만 새로고침 없이 작동됨</label><br><br>
+            <label>분류: <input type="text" name="classify" id="classify"></label><br>
+            <label>이름: <input type="text" name="title" id="title"></label><br>
+            <label>링크: <input type="text" name="link" id="link"></label><br>
+            <label>아이콘(링크): <input type="text" name="icon" id="icon"></label><br>
+            <input type="button" name="addBtn" id="addBtn" value="추가" onclick="addLink()">
+        </form>
+        <br>
+        <div id="container">
+            <label id="sorts">정렬 기준 : </label>
+            <input type="button" name="changeSort" id="changeSort" value="정렬 변경(오<=>내)" onclick="changeSort()">
+            <table>
+                <caption>즐겨찾기 목록</caption>
+                <thead>
+                    <tr>
+                        <th class="sorting">로고</th>
+                        <th class="sorting"><a href="javascript:sort1();">분류</a></th>
+                        <th class="sorting"><a href="javascript:sort2();">이름</a></th>
+                        <th class="sorting">링크</th>
+                        <th class="sorting"><a href="javascript:sort3();">방문 횟수</a></th>
+                        <th class="sorting">수정</th>
+                        <th class="sorting">삭제</th>
+                    </tr>
+                </thead>
+                <tbody id="list"></tbody>
+            </table>
+        </div>
+        <div id="output"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Fig. 15.12 : computer.xsd -->
+<!-- W3C XML Schema document -->
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:computer = "http://www.deitel.com/computer"    
+    targetNamespace = "http://www.deitel.com/computer">
+
+    <simpleType name="gigahertz">
+        <restriction base="decimal">
+            <minInclusive value="2.1"/>
+        </restriction>
+    </simpleType>
+
+    <complexType name="CPU">
+        <simpleContent>
+            <extension base="string">
+                <attribute name = "model" type="string"/>
+            </extension>
+        </simpleContent>
+    </complexType>
+
+    <complexType name="portable">
+        <all>
+            <element name="processor" type="computer:CPU"/>
+            <element name="monitor" type="int"/>
+            <element name="CPUSpeed" type="computer:gigahertz"/>
+            <element name="RAM" type="int"/>
+        </all>
+    </complexType>
+    <element name="laptop" type="computer:portable"/>
+</schema>

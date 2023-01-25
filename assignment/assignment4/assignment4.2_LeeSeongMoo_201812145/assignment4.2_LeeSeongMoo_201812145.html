@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment 4-2</title>
+    <link rel = "stylesheet" type="text/css" href="assignment4.2_LeeSeongMoo_201812145.css">
+    <script src = "assignment4.2_LeeSeongMoo_201812145.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <form name="form1" method="GET" action="#">
+            <label>이름:</label> <input type="text" class = "input_text" id="name" name="name" ><br>
+            <label>전화번호:</label> <input type="tel" class = "input_text" id="tel" name="tel" ><br>
+            <label>이메일:</label> <input type="email" class = "input_text" id="email" name="email" ><br>
+            <label>메모:</label> <input type="text" class = "input_text" id="memo" name="memo" ><br>
+            
+            <input type="button"  id="add_btn" name="add_btn" value="연락처 추가" onclick="addTel()">
+            <input type="button"  id ="del_btn" name="del_btn" value="연락처 삭제" onclick="deleteTel()">
+            <input type="reset"  id="clear_btn"name="clear_btn" value="모두 삭제" onclick="clearAll()">
+        </form>
+        <br>
+        <div id="name_container"></div>
+        <nav class="page" id="page_nav"></nav>
+    </div>
+    <div id="info_box"></div>
+
+</body>
+</html>

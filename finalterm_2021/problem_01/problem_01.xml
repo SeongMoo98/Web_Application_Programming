@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type = "text/xsl" href = "problem_01.xsl"?>
+<mylink>
+  <classify>대학</classify>
+  <title>부산대학교</title>
+  <link>https://www.pusan.ac.kr</link>
+  <icon>image.jpg</icon>
+  <count>10</count>
+</mylink>

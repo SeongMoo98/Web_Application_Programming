@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Fig. 15.2: article.xml -->
+<!-- Article structured with XML -->
+<article>
+    <title>Simple XML</title>
+    <date>July 4, 2007</date>
+    <author>
+        <firstName>John</firstName>
+        <lastName>Doe</lastName>
+    </author>
+
+    <summary>XML is pretty easy</summary>
+    <contact>This chapter presents examples that use XML.</contact>
+</article>

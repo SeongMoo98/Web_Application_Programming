@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Example</title>
+    <style type="text/css">
+        #linkContainer {
+            display: flex;
+            flex-wrap: wrap;
+            width: 310px;
+        }
+        #linkContainer a  {
+            display: block;
+            list-style-type: none;
+            text-align: center;
+            border: 2px solid;
+            font-size:13px;
+            font-weight: 600;
+            width: 140px;
+            height: 65px;
+            margin: 1px;
+        }        
+        a   { 
+            text-decoration: none;
+        }
+        .maindiv {
+            width: 320px;
+            float: left;
+            text-align: justify;
+        }
+        .pagination {
+            visibility: hidden;
+            display: inline-block;
+        }
+        .pagination div {
+            float: left;
+            padding: 8px 16px;
+        }
+        .pagination div.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .pagination div:hover:not(.active) {background-color: #ddd;}
+        
+    </style>
+    <script type="text/javascript">
+        var linkArr = new Array();
+        var curPage = 0;
+
+        function addIt() {
+            if (linkArr.findIndex(checkTitle) >= 0) {
+                window.alert("있는 이름입니다");
+                return;
+            }
+            if (document.forms[0].name.value == "" || document.forms[0].phone.value == "") {
+                window.alert("이름과 전화번호를 채워주세요");
+                return;
+            }
+            var a = document.forms[0].name.value;
+            var b = document.forms[0].phone.value;
+            var c = document.forms[0].email.value;
+            var d = document.forms[0].memo.value;
+            if (c == "") c = "-";
+            if (d == "") d = "-";
+            linkArr.push({name: a, phone: b, email: c, memo: d});
+            linkArr.sort(compareTitle);
+
+            document.forms[0].reset();
+            makePages();
+            showBox();
+            updateData();
+        }
+        function checkTitle(link) {
+            return link.name == document.forms[0].name.value;
+        }
+        function compareTitle(link1, link2) {
+            if (link1.name > link2.name) return 1;
+            else if (link1.name < link2.name) return -1;
+            else return 0;
+        }       
+        function deleteIt() {
+            var idx = linkArr.findIndex(checkTitle);
+            if (idx < 0) {
+                window.alert("저장되어 있는 정보가 없습니다");
+                return;
+            }
+            linkArr.splice(idx, 1);
+            makePages();
+            showBox();
+            updateData();
+        }
+        function clearAll() {
+            linkArr = Array();
+            document.getElementById("linkContainer").innerHTML = "";
+            updateData();
+        }
+        function showBox() {
+            var linkContainer = document.getElementById("linkContainer");
+            linkContainer.innerHTML = "";
+
+            var startIdx = curPage * 10;
+            var endIdx = startIdx + 9;
+            for(var idx = startIdx; idx < linkArr.length && idx <= endIdx; idx++) {
+                var link = makeLink(linkArr[idx].name, linkArr[idx].phone, linkArr[idx].email, linkArr[idx].memo);
+                linkContainer.innerHTML += link;
+            }
+        }
+        function makeLink(name, phone, email, memo) {
+            return "<a>" + name + "<br>" + phone + "<br>" + email + "<br>" + memo + "</a>";
+        }
+        function makePages() {
+            if (linkArr.length > 10) {
+                var nPage = Math.ceil(linkArr.length / 10);
+                var pageNav = document.getElementById("pageNav");
+                pageNav.style.visibility = "visible";
+                pageNav.innerHTML = "";
+                
+                for(var i =0; i < nPage; i++) {
+                    if (i == curPage)
+                        pageNav.innerHTML += "<div class=\"active\" onclick=\"changePage(" + i +")\">" + (i + 1) + "</div>";
+                    else
+                        pageNav.innerHTML += "<div onclick=\"changePage(" + i +")\">" + (i + 1) + "</div>";
+
+                }
+            }
+        }
+        function changePage(pageNum) {
+            curPage = pageNum;
+            makePages();
+            showBox();
+        }
+        function updateData() {
+            localStorage.removeItem("links");
+            localStorage.setItem("links", JSON.stringify(linkArr));
+        }
+        function start() {
+            var links = localStorage.getItem("links");
+            if (links != null) {
+                linkArr = JSON.parse(links);
+                makePages();
+                showBox();
+            }
+        }
+    </script>
+    </head>
+<body onload="start()">
+    <div class="maindiv">
+        <form name="form1" method="GET" action="#">
+            <label>이름:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="name" id="name"></label><br>
+            <label>전화번호:&nbsp;<input type="text" name="phone" id="phone"></label><br>
+            <label>이메일:&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="email" id="email"></label><br>
+            <label>메모:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="memo" id="memo"></label><br>
+            <input type="button" name="addBtn" id="addBtn" value="연락처 추가" onclick="addIt()">
+            <input type="button" name="delBtn" id="delBtn" value="연락처 삭제" onclick="deleteIt()">
+            <input type="reset" name="ClearBtn" id="clearBtn" value="모두 삭제" onclick="clearAll()">
+        </form>
+        <br>
+        <div id="linkContainer">
+        </div>
+        <nav class="pagination" id="pageNav">
+        </nav>
+    </div>
+</body>
+</html>

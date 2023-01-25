@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset = "utf-8">
+    <link rel = "stylesheet" type = "text/css" href = "style.css">
+    <script>
+        var outputHTML = "";
+
+        function start(){
+            loadXMLDocument( 'problem_01.xml' );
+        }
+
+        function loadXMLDocument( url ){   
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var temp = this.responseXML;
+                    buildHTML(temp)//.childNodes);
+                    displayDoc();
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+
+        function buildHTML( temp ){
+            var link = temp.getElementsByTagName("link")[0].childNodes[0].nodeValue;
+            var classify = temp.getElementsByTagName("classify")[0].childNodes[0].nodeValue;
+            var title = temp.getElementsByTagName("title")[0].childNodes[0].nodeValue;
+            var icon = temp.getElementsByTagName("icon")[0].childNodes[0].nodeValue;
+            var count = temp.getElementsByTagName("count")[0].childNodes[0].nodeValue;
+            outputHTML += "<img src='" + icon + "'>"
+                + "<label>[" + classify + "] "
+                + "<a href='" + link + "'>" + title + "</a>"
+                + "<label>(" + count + "회 방문)</label>"
+        }
+        function displayDoc(){
+            document.getElementById( "outputDiv" ).innerHTML = outputHTML;
+        }
+
+        window.addEventListener( "load", start, false );
+
+    </script>
+    <title>Mylink DOM</title>
+</head>
+
+<body id = "body"> 
+    <div id = "outputDiv"></div>
+</body>
+</html>

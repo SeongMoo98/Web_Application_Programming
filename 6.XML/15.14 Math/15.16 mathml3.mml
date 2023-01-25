@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN"
+      "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd">
+
+<!-- Fig. 15.16 mathml3.mml -->
+<!-- Calculus example using MathML -->
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+   <mrow>
+      <msubsup>
+          <mo>&int;</mo>
+          <mn>0</mn>
+          <mrow>
+             <mn>1</mn>
+             <mo>&minus;</mo>
+             <mi>y</mi>
+          </mrow>
+      </msubsup>
+      <msqrt>
+         <mn>4</mn>
+         <mo>&InvisibleTimes;</mo>
+         <msup>
+            <mi>x</mi>
+            <mn>2</mn>
+         </msup>
+         <mo>+</mo>
+         <mi>y</mi>
+      </msqrt>
+      <mi>&delta;</mi>
+      <mi>x</mi>
+   </mrow>
+</math>

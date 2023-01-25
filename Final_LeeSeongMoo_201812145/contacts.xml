@@ -1,0 +1,40 @@
+<?xml version = "1.0"?>
+<?xml-stylesheet type = "text/xsl" href = "contacts.xsl"?>
+
+<contacts>
+    <contact group="선배">
+        <name>이대호</name>
+        <tel>010-3434-1212</tel>
+        <birth>1992-06-21</birth>
+        <email>leedh@abc.co.kr</email>
+        <memo>메모1</memo>
+    </contact>
+    <contact group="친구">
+        <name>김철수</name>
+        <tel>010-1212-3434</tel>
+        <birth>2002-05-18</birth>
+        <email>kimcs@abc.co.kr</email>
+        <memo>메모2</memo>
+    </contact>
+    <contact group="가족">
+        <name>이영희</name>
+        <tel>010-1111-2222</tel>
+        <birth>2005-08-24</birth>
+        <email>leeyh@abc.co.kr</email>
+        <memo>메모3</memo>
+    </contact>
+    <contact group="선배">
+        <name>박찬호</name>
+        <tel>010-3333-4444</tel>
+        <birth>1993-07-28</birth>
+        <email>parkch@abc.co.kr</email>
+        <memo>메모4</memo>
+    </contact>
+    <contact group="후배">
+        <name>홍길동</name>
+        <tel>010-0101-1010</tel>
+        <birth>2003-03-01</birth>
+        <email>hongkd@abc.co.kr</email>
+        <memo>메모5</memo>
+    </contact>
+</contacts>

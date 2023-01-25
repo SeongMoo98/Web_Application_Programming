@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title> Pulling Images onto the Page </title>
+    <style type="text/css">
+        li {
+            display: inline-block;
+            padding: 4px;
+            width: 120px;
+        }
+        img{
+            border: 1px solid black;
+        }
+    </style>
+
+    <script>
+        var asyncRequest;
+        
+        function getImages( url ){
+            try{
+                asyncRequest = new XMLHttpRequest();
+
+                // Register Event Listener
+                asyncRequest.addEventListener("readystatechange", processResponse, false);
+                asyncRequest.open("GET", url, true);
+                asyncRequest.send();
+            }
+            catch( exception ){
+                alert("Request Failed.");
+            }
+        }
+
+        // Parse the XML response; 
+        // Dynamically creates an unordered list and populates it with the data response data;
+        // Displays the list on the page
+        function processResponse(){
+            // If request completed successfully and responseXML is non-null
+            // 즉, 결과로 받아 올 데이터가 XML인지
+            if(asyncRequest.readyState == 4 && 
+                asyncRequest.status == 200 && 
+                asyncRequest.responseXML )
+            {
+                clearImages();
+
+                //1. 각 XML에서 cover를 모두 가져온다
+                var covers = asyncRequest.responseXML.getElementsByTagName("cover");
+
+                var baseUrl = asyncRequest.responseXML   // Parsing된 XML
+                    .getElementsByTagName("baseurl")    // TagName("baseurl")
+                    .item(0).firstChild.nodeValue;      // item(0) ???
+
+                var output = document.getElementById("covers");
+                
+                var images_ul = document.createElement("ul");
+                for(var i=0; i < covers.length; i++){
+                    //2. covers의 각 cover에 대한
+                    var cover = covers.item(i);
+                    //3. image Tag를 가져와 첫번째 Node의 value(Text)를 사용
+                    // 이 때 각 cover의 image는 1개 ( 즉 item(0)임을 안다 )
+                    var image = cover.getElementsByTagName("image").
+                        item(0).firstChild.nodeValue;
+                    
+                    // Create li and img element to display the image
+                    var image_tag = document.createElement("img");
+                    var image_li = document.createElement("li");
+                    
+                    image_tag.setAttribute("src", baseUrl + escape(image) );
+                    image_li.appendChild(image_tag);
+
+                    images_ul.appendChild(image_li);
+                }
+                output.appendChild(images_ul);
+            }
+        }
+
+        function clearImages(){
+            document.getElementById("covers").innerHTML = "";
+        }
+
+        function registerListeners(){
+            document.getElementById( "all" ).addEventListener("click", function() { getImages( "all.xml" ); }, false ); 
+            document.getElementById( "simply" ).addEventListener("click", function() { getImages( "simply.xml" ); }, false ); 
+            document.getElementById( "howto" ).addEventListener("click", function() { getImages( "howto.xml" ); }, false ); 
+            document.getElementById( "dotnet" ).addEventListener("click", function() { getImages( "dotnet.xml" ); }, false ); 
+            document.getElementById( "javaccpp" ).addEventListener("click", function() { getImages( "javaccpp.xml" ); }, false ); 
+            document.getElementById( "none" ).addEventListener("click", clearImages, false ); 
+        } 
+        window.addEventListener( "load", registerListeners, false );
+    </script>
+</head>
+<body>
+    <input type = "radio" name ="Books" value = "all" id = "all"> All Books 
+    <input type = "radio" name = "Books" value = "simply" id = "simply"> Simply Books 
+    <input type = "radio" name = "Books" value = "howto" id = "howto"> How to Program Books 
+    <input type = "radio" name = "Books" value = "dotnet" id = "dotnet"> .NET Books 
+    <input type = "radio" name = "Books" value = "javaccpp" id = "javaccpp"> Java/C/C++ Books
+    <input type = "radio" checked name = "Books" value = "none" id = "none"> None 
+    <div id = "covers"></div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Fig. 15.34 sports.xml -->
+<!-- Sports Database        -->
+<sports>
+    <game id ="783">
+        <name>Cricket</name>
+        <paragraph>
+            More popular among commonwealth naions.
+        </paragraph>
+    </game>
+    <game id ="239">
+        <name>Baseball</name>
+        <paragraph>
+            More popular in America.
+        </paragraph>
+    </game>
+    <game id ="783">
+        <name>Soccer (Football)</name>
+        <paragraph>
+            Most popular sport in the world.
+        </paragraph>
+    </game>
+
+</sports>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mid1</title>
+        <style>
+            .container, .content {
+                padding: 15px; 
+                margin : 10px;
+                width: 450px; 
+                text-align : center; 
+            }
+            .container {
+                height: 30px; 
+                color : black;
+                font-size: 30px;
+                font-weight: bold;
+            } 
+        
+            input[type=text] {
+                width : 100%;
+                height : 40px;
+                border : 1px solid gray;
+                box-sizing: border-box;
+                padding : 5px;
+            }
+
+            input[type=button], input[type=reset]{
+                background-color : gray;
+                width : 45%;
+                height: 50px;
+                padding : 10px;
+                margin : 5px;
+                color : white ;
+                box-sizing: border-box;
+                border: none;
+            } 
+
+            span {
+                display : inline-block ;
+                width : 50%;
+                padding : 5px 20px;
+                font-size: 20px;
+                
+                box-sizing: border-box;
+                text-align: left;
+                font-weight: bold;
+            }
+
+            .cover {
+                visibility: hidden;
+                border: 2px solid black;
+                text-align: center;
+                border-radius: 10px;
+                width: 350px;
+            } 
+            
+            .pnu_title {
+                width: 100%;
+                text-align: center;
+                font-size: 20px;
+            }
+              
+            .pnu_text {
+                width: 100%;
+                text-align: center;
+                font-size: 20px;
+            }
+            .pnu_text {
+                color:gray;
+            }   
+        
+        </style>
+
+        <script>
+            function makeLogo() {
+                var title = document.forms[0].title.value;
+                var description = document.forms[0].description.value;
+                var publish = document.forms[0].publish.value;
+                var author = document.forms[0].author.value;
+
+                if (title == "" || description == "" || publish == "" || author == ""){
+                    window.alert("입력이 누락되었습니다.");
+                }
+                else {
+                    document.getElementById("p_title").innerHTML = title;
+                    document.getElementById("p_description").innerHTML = description;
+                    document.getElementById("p_publish").innerHTML = publish;
+                    document.getElementById("p_author").innerHTML = author+ " 지음";
+                    document.getElementById("cover").style.visibility = "visible";
+                }
+            }
+
+            function clearAll() {
+                document.getElementById("cover").style.visibility = "hidden";
+            }
+        </script>
+</head>
+<body>
+    
+        <form name="form1" id="form1">
+            <div class = "container">책 표지 만들기</div>
+            <div class = "content">
+                <p><input type="text" id = "title" placeholder="제목 입력"></p>
+                <p><input type="text" id = "description" placeholder="설명 입력"></p>
+                <p>
+                    <input type="text" id = "publish" placeholder="출판사 입력" list = "pub">
+                    <datalist id="pub">
+                        <option value="부산출판사"></option>
+                        <option value="금정출판사"></option>
+                        <option value="장전출판사"></option>
+                    </datalist>
+                </p>
+
+                <p><input type="text" id = "author" placeholder="저자 입력"></p>
+
+                <p>
+                    <input type="button" value = "책표지 출력" onclick="makeLogo()">
+                    <input type="reset" value = "초기화" onclick="clearAll()">
+                </p>
+            </div>
+        </form>
+
+    </div>
+    
+    <div class="cover" id="cover">
+        <span id="p_title"></span>
+        <p>
+            <img src="pnu.jpg" alt="PNU LOGO">
+        </p>
+        <span id="p_description"></span>
+        <span id="p_author"></span>
+        <span id="p_publish"></span>
+    </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Example</title>
+    <style type="text/css">
+        div {
+            display: flex;
+            width:300px;
+            flex-wrap:wrap;
+        }
+        div a {
+            display: none;
+            text-decoration: none;
+            text-align: center;
+            font-size: 3em;
+            border: 1px solid;
+            width: 3em;
+        }
+        div:hover {
+            
+        }
+        div:hover a {
+            display: inline-block;
+        }
+        /*div a:hover:not(#dropDown) {
+            background-color: lightblue;
+        }*/
+        #dropDown { 
+            background-color: gray;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+        <div>
+            <a id="dropDown" href="http://www.naver.com">1</a>
+            <a href="http://www.naver.com">2</a>
+            <a href="http://www.naver.com">3</a>
+            <a href="http://www.naver.com">4</a>
+            <a href="http://www.naver.com">5</a>
+            <a href="http://www.naver.com">6</a>
+            <a href="http://www.naver.com">7</a>
+            <a href="http://www.naver.com">8</a>
+            <a href="http://www.naver.com">9</a>
+            <a href="http://www.naver.com">10</a>
+        </div>
+</body>
+</html>

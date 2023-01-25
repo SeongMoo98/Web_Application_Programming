@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment 4-1</title>
+    <link rel = "stylesheet" type="text/css" href="assignment4.1_LeeSeongMoo_201812145.css">
+    <script src = "assignment4.1_LeeSeongMoo_201812145.js"></script>
+</head>
+<body>
+    
+    <form name="form1" id="form1">
+        <div class = "container">책 표지 만들기</div>
+        <div class = "content">
+            <p><input type="text" id = "title" placeholder="제목 입력"></p>
+            <p><input type="text" id = "description" placeholder="설명 입력"></p>
+                <input type="text" id = "publish" placeholder="출판사 입력" list = "pub">
+                <datalist id="pub">
+                    <option value="부산출판사"></option>
+                    <option value="금정출판사"></option>
+                    <option value="장전출판사"></option>
+                </datalist>
+            </p>
+
+            <p><input type="text" id = "author" placeholder="저자 입력"></p>
+
+            <p>
+                <input type="button" value = "책표지 출력" onclick="makeLogo()">
+                <input type="reset" value = "초기화" onclick="clearAll()">
+            </p>
+        </div>
+    </form>
+    
+    <div class="cover" id="cover">
+        <span class = "cover_text" id="cover_title"></span>
+        <p>
+            <img src="pnu.jpg" alt="PNU LOGO">
+        </p>
+        <span class = "cover_text" id="cover_description"></span>
+        <span class = "cover_text" id="cover_author"></span>
+        <span class = "cover_text" id="cover_publish"></span>
+    </div>
+</body>
+</html>

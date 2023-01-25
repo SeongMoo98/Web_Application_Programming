@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<!-- Fig. 6.7: addition.html -->
+<!-- Addition script. -->
+<html>
+   <head>
+      <meta charset = "utf-8">
+      <title>An Addition Program</title>
+      <script>
+
+        var first_number;
+        var second_number;
+        var number1;
+        var number2;
+        var sum;
+
+        //window.prompt() 는 User로부터 String으로 받는다
+        first_number = window.prompt("Enter first integer");
+        second_number = window.prompt("Enter second integer");
+
+        number1 = parseInt(first_number);
+        number2 = parseInt(second_number);
+
+        sum = number1 + number2;
+
+        document.writeln("<h1>The sum is " + sum + "</h1>");
+        
+      </script>
+</head>
+<body>
+    
+</body>
+</html>

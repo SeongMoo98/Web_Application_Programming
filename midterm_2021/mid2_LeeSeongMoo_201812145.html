@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+        .infoContainer {
+            display: flex;
+            flex-wrap: wrap;
+            width: 310px;
+        }
+
+        .container{
+            width: 320px;
+            float: left;
+        }
+    </style>
+
+    <script>
+        var infoArr = new Array();
+        
+        function addTel(){
+            var name = document.forms[0].name.value;
+            var tel = document.forms[0].tel.value;
+            var email = document.forms[0].email.value;
+            var memo = document.forms[0].memo .value
+
+            if(name == "" || tel == ""){
+                window.alert("정보를 완전히 입력해주세요");
+                return;
+            }
+            if(infoArr.findIndex(checkName) >= 0 ){
+                window.alert("이미 있는 즐겨찾기 제목입니다. 다른 제목을 사용해주세요.");
+                return;
+            }
+
+            infoArr.push({name : name,  tel : tel, email : email, memo : memo});                
+            infoArr.sort(compareTitle);
+
+            document.forms[0].reset(0);
+
+            updateDate();
+        }
+
+        function checkName(info){
+            return info.name == document.forms[0].name.value;
+        }
+
+        function compareTitle(info1, info2){
+            if(info1.name > info2.name){
+                return 1;
+            }
+            else if (info2.name < info2.name)
+                return -1;
+            else
+                return 0;
+        }
+
+        function delTel(){
+            var index = infoArr.findIndex(checkName);
+
+            if(index < 0){
+                window.alert("연락처가 없습니다.");
+                return;
+            }
+            linkArr.splice(index, 1);
+            makePages();
+            showLinks();
+            updateData();
+        }
+
+
+        function clearAll(){
+            infoArr = Array();
+            document.getElementById("telContainer").innerHTML = "";
+            updateData();
+        }
+
+        function showInfos(){
+            var infoContainer = document.getElementById("telContainer");
+            telContainer.innerHTML = "";
+            for(var idx = 0; idx < infoArr.length; idx++){
+                var info = makeInfo(infoArr[idx].name, infoArr[idx].tel, infoArr[idx].email, infoArr[idx].memo);
+                infoContainer.innerHTML += info;
+            }
+        }
+        function makeInfo(name,tel,email,memo){
+
+        }
+
+        function updateData(){
+            localStorage.removeItem("info");
+            localStorage.setItem("info", JSON.stringify(infoArr));
+        }
+
+        function start(){
+            var info = localStorage.getItem("info");
+            if(info != null){
+                infoArr = JSON.parse(info);
+                showInfos();
+            }
+        }
+
+        window("load", start, false);
+    </script>
+
+</head>
+<body>
+
+    <div class="container">
+        <form name="form1" method="GET" action="#">
+            <label>이름 : 
+                <input type="text" name="name" id="name">
+            </label><br>
+            <label>전화번호: 
+                <input type="tel" name="tel" id="tel">
+            </label><br>
+            <label>이메일: 
+                <input type="email" name="email" id="email">
+            </label><br>
+            <label>메모: 
+                <input type="text" name="memo" id="memo">
+            </label><br>
+            
+            <input type="button" name="addBtn" id="addBtn" 
+                value="연락처 추가" onclick="addTel()">
+            <input type="button" name="delBtn" id ="delBtn"
+                value="연락처 삭제" onclick="delTel()">
+            <input type="reset" name="clearBtn" id="clearBtn"
+                value="모두 삭제" onclick="clearAll()">
+        </form>
+        <br>
+        <div class="infoContainer"></div>
+    </div>
+
+</body>
+</html>

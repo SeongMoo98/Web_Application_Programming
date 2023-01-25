@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<!-- Fig. 9.5: RollDice.html -->
+<!-- Random dice image generation using Math.random. -->
+
+<html>
+   <head>
+      <meta charset = "utf-8">
+      <title>Random Dice Images</title>
+      <style type="text/css">
+        li { display: inline; margin-right: 10px; }
+        ul { margin: 0; }
+      </style>
+
+      <script>
+        //Variables used to interact with the img elements
+        var die1_image;
+        var die2_image;
+        var die3_image;
+        var die4_image;
+
+
+        //Register button listener and get the img element
+        function start(){
+            var button = document.getElementById("rollButton");
+            button.addEventListener("click", rollDice, false);
+
+            die1_image = document.getElementById("die1");
+            die2_image = document.getElementById("die2");
+            die3_image = document.getElementById("die3");
+            die4_image = document.getElementById("die4");
+        }
+
+        //Roll Dice
+        function rollDice(){
+            setImage(die1_image);
+            setImage(die2_image);
+            setImage(die3_image);
+            setImage(die4_image);
+        }
+
+        function setImage( dieImg ){
+
+            var dieValue = Math.floor( 1 + Math.random()*6); //1 ~ 6
+            dieImg.setAttribute("src", "die" + dieValue + ".png");
+            dieImg.setAttribute("alt", "die Image with " + dieValue + " spot(s)");
+        }
+
+        window.addEventListener("load", start, false);
+
+      </script>
+</head>
+<body>
+
+    <form action = "#">
+        <input id = "rollButton" type = "button" value = "Roll Dice">
+    </form>
+
+    <ol>
+        <li><img id = "die1" src = "blank.png" alt = "die 1 image"></li>
+        <li><img id = "die2" src = "blank.png" alt = "die 2 image"></li>
+        <li><img id = "die3" src = "blank.png" alt = "die 3 image"></li>
+        <li><img id = "die4" src = "blank.png" alt = "die 4 image"></li>
+    </ol>
+    
+</body>
+</html>
